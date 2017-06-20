@@ -1,0 +1,135 @@
+<title>Avatar Generator</title>
+
+<style>
+	*{
+		font-family: Roboto;
+		font-weight: bold;
+	}
+	
+	body{
+		text-align: center;
+	}
+
+	button{
+		border: 1px solid black; 
+		background: transparent; 
+		padding: .5rem 1rem;
+		color: black;
+		font-size: 15px;
+		transition: .1s ease;
+		cursor: pointer;
+		border-bottom: 3px solid black;
+		shadow: 1px;
+		outline: none;
+	}
+	
+	button:hover{
+		background: black;
+		color: white;
+	}
+	
+	button:active{
+		border-bottom: 1px solid black;
+		transform: translateY(2px);
+	}
+	
+	canvas{
+		margin: 1rem;
+		border: 1px solid black;
+		padding: 0rem;
+		
+	}
+	
+	input{
+		width: 160px;
+		height: 20px;
+		border: 1px solid black;
+		padding: .75rem .3rem;
+		outline: none;
+		transition: .5s ease;
+		border-bottom: 3px solid;
+		border-color: black;
+	}
+	
+	input:focus{
+		border-color: #4a4a4a;
+	}
+	
+	span{
+		color: #8b8b8b;
+		font-size: .7rem;
+		position: relative;
+		top: -1.2rem;
+		left: -160px;
+	}
+</style>
+
+<p>The recommended size is 5 x 5 with a pixel size of 60.</p>
+
+<br>
+<input id="width" value="5" placeholder="Width">
+<span>Width</span>
+<input id="height" value="5" placeholder="Height">
+<span>Height</span>
+<input id="pixel" value="60" placeholder="Pixel size">
+<span>Pixel Size</span>
+<br>
+<canvas width="360px" height="360px" id="canvas"></canvas>
+<br>
+<a id="link"></a>
+<br>
+<br>
+<button onclick="generate()">GENERATE</button>
+
+<script>
+const c = document.getElementById("canvas")
+const canvas = c.getContext("2d");
+const link = document.getElementById("link");
+
+const height = parseInt(document.getElementById("width").value);
+const width = parseInt(document.getElementById("height").value);
+const pixelSize = parseInt(document.getElementById("pixel").value);
+c.height = height * pixelSize;
+c.width = width * pixelSize;
+
+let getRandomColor = function() {
+    const chars = '0123456789ABCDEF';
+    let color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += chars[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+	
+let generate = function(){
+	const height = parseInt(document.getElementById("width").value);
+	const width = parseInt(document.getElementById("height").value);
+	const pixelSize = parseInt(document.getElementById("pixel").value);
+	
+	c.height = height * pixelSize;
+	c.width = width * pixelSize;
+	
+	canvas.clearRect(0, 0, c.width, c.height)
+	
+	let randomColor = getRandomColor();
+	
+	if(randomColor.toLowerCase() == "#fbfbfb") randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+	
+	for(let i = 0; i < height; i++){
+		const rand = Math.floor(Math.random() * width);
+		const mirror = width - 1 - rand;
+		console.log(rand + " | " + mirror)
+		for(let j = 0; j < width; j++){
+			if(j === rand || j === mirror)
+				canvas.fillStyle = randomColor;
+			else
+				canvas.fillStyle = "#fbfbfb";
+			canvas.fillRect(j * pixelSize, i * pixelSize, pixelSize, pixelSize);
+		}
+	}
+	
+	link.text = "Link";
+	link.href = c.toDataURL();
+}
+
+</script>
