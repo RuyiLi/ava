@@ -107,17 +107,26 @@ const c = document.getElementById("avatar")
 const canvas = c.getContext("2d");
 const link = document.getElementById("link");
 
+const wIn = document.getElementById("width");
+const hIn = document.getElementById("height");
+const psIn = document.getElementById("pixel");
+
 let height = getParam("height") ? parseInt(getParam("height")) : 5;
 let width = getParam("width") ? parseInt(getParam("width")) : 5;
 let pixelSize = getParam("pixelSize") ? parseInt(getParam("pixelSize")) : 60;
+
+wIn.value = height;
+hIn.value = width;
+psIn.value = pixelSize;
+
 c.height = height * pixelSize;
 c.width = width * pixelSize;
 
 	
 let generate = function(){
-	height = parseInt(document.getElementById("width").value) ? parseInt(document.getElementById("width").value) : height;
-	width = parseInt(document.getElementById("height").value) ? parseInt(document.getElementById("height").value): width;
-	pixelSize = parseInt(document.getElementById("pixel").value) ? parseInt(document.getElementById("pixel").value) : pixelSize;
+	height = parseInt(wIn.value) ? parseInt(wIn.value) : 5;
+	width = parseInt(hIn.value) ? parseInt(hIn.value): 5;
+	pixelSize = parseInt(psIn.value) ? parseInt(psIn.value) : 60;
 	
 	c.height = height * pixelSize;
 	c.width = width * pixelSize;
