@@ -1,4 +1,4 @@
-<title>Avatar Generator</title>
+<title>AVA - A simple avatar generator</title>
 
 <style>
 	*{
@@ -59,22 +59,30 @@
 		color: #8b8b8b;
 		font-size: .7rem;
 		position: relative;
-		top: -1.2rem;
+		top: -1.3rem;
 		left: -160px;
 	}
+	
+	h4{
+		margin-top: -1rem;
+	}
 </style>
+
+<h1>AVA</h1>
+<h4>A simple avatar generator.</h4>
+<h4>Link parameters are supported. You can add <a href="https://ruyili.github.io/ava?width=5&height=5&pixelSize=60">?width=5&height=5&pixelSize=60</a> to the url, for example.</h4>
 
 <p>The recommended size is 5 x 5 with a pixel size of 60.</p>
 
 <br>
-<input id="width" value="5" placeholder="Width">
+<input id="width" placeholder="Width">
 <span>Width</span>
-<input id="height" value="5" placeholder="Height">
+<input id="height" placeholder="Height">
 <span>Height</span>
-<input id="pixel" value="60" placeholder="Pixel size">
+<input id="pixel" placeholder="Pixel size">
 <span>Pixel Size</span>
 <br>
-<canvas width="360px" height="360px" id="canvas"></canvas>
+<canvas width="360px" height="360px" id="avatar"></canvas>
 <br>
 <a id="link"></a>
 <br>
@@ -82,15 +90,10 @@
 <button onclick="generate()">GENERATE</button>
 
 <script>
-const c = document.getElementById("canvas")
-const canvas = c.getContext("2d");
-const link = document.getElementById("link");
 
-const height = parseInt(document.getElementById("width").value);
-const width = parseInt(document.getElementById("height").value);
-const pixelSize = parseInt(document.getElementById("pixel").value);
-c.height = height * pixelSize;
-c.width = width * pixelSize;
+let getParam = function(name) {
+	return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
 
 let getRandomColor = function() {
     const chars = '0123456789ABCDEF';
@@ -100,11 +103,31 @@ let getRandomColor = function() {
     }
     return color;
 }
+
+const c = document.getElementById("avatar")
+const canvas = c.getContext("2d");
+const link = document.getElementById("link");
+
+const wIn = document.getElementById("width");
+const hIn = document.getElementById("height");
+const psIn = document.getElementById("pixel");
+
+let height = getParam("height") ? parseInt(getParam("height")) : 5;
+let width = getParam("width") ? parseInt(getParam("width")) : 5;
+let pixelSize = getParam("pixelSize") ? parseInt(getParam("pixelSize")) : 60;
+
+wIn.value = height;
+hIn.value = width;
+psIn.value = pixelSize;
+
+c.height = height * pixelSize;
+c.width = width * pixelSize;
+
 	
 let generate = function(){
-	const height = parseInt(document.getElementById("width").value);
-	const width = parseInt(document.getElementById("height").value);
-	const pixelSize = parseInt(document.getElementById("pixel").value);
+	height = parseInt(wIn.value) ? parseInt(wIn.value) : 5;
+	width = parseInt(hIn.value) ? parseInt(hIn.value): 5;
+	pixelSize = parseInt(psIn.value) ? parseInt(psIn.value) : 60;
 	
 	c.height = height * pixelSize;
 	c.width = width * pixelSize;
@@ -118,7 +141,6 @@ let generate = function(){
 	for(let i = 0; i < height; i++){
 		const rand = Math.floor(Math.random() * width);
 		const mirror = width - 1 - rand;
-		console.log(rand + " | " + mirror)
 		for(let j = 0; j < width; j++){
 			if(j === rand || j === mirror)
 				canvas.fillStyle = randomColor;
@@ -132,4 +154,5 @@ let generate = function(){
 	link.href = c.toDataURL();
 }
 
+generate();
 </script>
